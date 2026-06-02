@@ -40,9 +40,19 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await response.json();
+const data = await response.json();
 
-    return res.status(200).json(data);
+const fretes = data
+  .filter(item => !item.error)
+  .map(item => ({
+    transportadora:
+      `${item.company?.name || ''} ${item.name || ''}`.trim(),
+    preco: item.price,
+    prazo: item.delivery_time
+  }))
+  .sort((a, b) => parseFloat(a.preco) - parseFloat(b.preco));
+
+return res.status(200).json(fretes);
 
   } catch (error) {
 
