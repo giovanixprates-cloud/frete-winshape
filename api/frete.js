@@ -44,6 +44,9 @@ const data = await response.json();
 
 const fretes = data
   .filter(item => !item.error)
+  .filter(item =>
+    ['Correios', 'Jadlog', 'Loggi'].includes(item.company?.name)
+  )
   .map(item => ({
     transportadora:
       `${item.company?.name || ''} ${item.name || ''}`.trim(),
