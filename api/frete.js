@@ -57,8 +57,26 @@ const fretes = data
     ['Correios', 'Jadlog', 'Loggi'].includes(item.company?.name)
   )
   .map(item => ({
-    transportadora:
-      `${item.company?.name || ''} ${item.name || ''}`.trim(),
+transportadora: (() => {
+
+  const empresa = item.company?.name || '';
+  const servico = item.name || '';
+
+  if (empresa === 'Correios' && servico === 'SEDEX')
+    return 'Correios SEDEX';
+
+  if (empresa === 'Jadlog')
+    return 'Jadlog';
+
+  if (empresa === 'Loggi' && servico.includes('Ponto'))
+    return 'Loggi Ponto';
+
+  if (empresa === 'Loggi')
+    return 'Loggi Express';
+
+  return `${empresa} ${servico}`.trim();
+
+})(),
     preco: item.price,
     prazo: item.delivery_time
   }))
